@@ -11,18 +11,18 @@ int Dedo4Sensor = A4;
 int Dedo5Sensor = A5;
 
 // Valores de referencia do sensor, com os dedos dobrados ao maximo
-int Dedo1Fechado = 25;
-int Dedo2Fechado = 19;
-int Dedo3Fechado = 9;
-int Dedo4Fechado = 10;
-int Dedo5Fechado = 9;
+int Dedo1Fechado = 600;
+int Dedo2Fechado = 600;
+int Dedo3Fechado = 600;
+int Dedo4Fechado = 600;
+int Dedo5Fechado = 600;
 
 // Valores de referencia do sensor, com os dedos esticados
-int Dedo1Aberto = 62;
-int Dedo2Aberto = 114;
-int Dedo3Aberto = 53;
-int Dedo4Aberto = 38;
-int Dedo5Aberto = 44;
+int Dedo1Aberto = 800;
+int Dedo2Aberto = 800;
+int Dedo3Aberto = 800;
+int Dedo4Aberto = 800;
+int Dedo5Aberto = 800;
 
 // Variaveis a serem enviadas via comunicaco bluetooth
 int Dedo1;
@@ -31,13 +31,19 @@ int Dedo3;
 int Dedo4;
 int Dedo5;
 
-// Pinos para a comunicacao serial do bluetooth (RX e TX)
-SoftwareSerial Bluetooth(0,1);
+// Pinos para a comunicacao serial do bluetooth (TX e RX)
+SoftwareSerial Bluetooth(3,2);
+
+// Teste Bluetooth
+int teste = 295;
 
 void setup()
 {
-  // Ativa a comunicacao serial a taxa de 9600 baud/s
-  Bluetooth.begin(9600);
+  // Ativa comunicacao serial a taxa de 9600 baud/s
+  Serial.begin(9600);
+  
+  // Ativa a comunicacao do bluetooth a taxa de 38400 baud/s
+  Bluetooth.begin(38400);
   
   // Setando as variaveis dos sensores dos dedos como entrada dos pinos
   pinMode(Dedo1Sensor, INPUT);   
@@ -45,11 +51,13 @@ void setup()
   pinMode(Dedo3Sensor, INPUT);
   pinMode(Dedo4Sensor, INPUT);
   pinMode(Dedo5Sensor, INPUT);
+  
+  pinMode(Bluetooth, OUTPUT);
 
 }
 
 void loop()
-{
+{  
   // Leitura dos Sensores
   Dedo1 = analogRead(Dedo1Sensor);
   Dedo2 = analogRead(Dedo2Sensor);  
@@ -88,7 +96,7 @@ void loop()
   Dedo4 = map(Dedo4, Dedo4Fechado, Dedo4Aberto, 0, 180);  
   Dedo5 = map(Dedo5, Dedo5Fechado, Dedo5Aberto, 0, 180);
   
-  // Transmissao dos valores via comunicacao serial do bluetooth (TX)
+  //Transmissao dos valores via comunicacao serial do bluetooth (TX)
   Bluetooth.write("A");      // Caractere para inicio de paridade
   Bluetooth.write(Dedo1);    
   Bluetooth.write(Dedo2);
@@ -96,5 +104,5 @@ void loop()
   Bluetooth.write(Dedo4);
   Bluetooth.write(Dedo5);
   
-  delay(100);
+  delay(1000);
 }
